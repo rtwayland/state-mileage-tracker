@@ -6,7 +6,7 @@ import moment from 'moment'
 import { usStateNames } from '../common/data'
 import StateSearch from './StateSearch'
 
-const mileageFormContainer = css`
+const fuelFormContainer = css`
   display: flex;
   justify-content: center;
   & .react-datepicker__input-container {
@@ -14,12 +14,11 @@ const mileageFormContainer = css`
   }
 `
 
-class MileageForm extends Component {
+class FuelForm extends Component {
   state = {
     searchValue: '',
     selectedState: '',
     startDate: moment(),
-    mileage: 0,
     gallons: 0
   }
 
@@ -29,11 +28,11 @@ class MileageForm extends Component {
       searchValue: '',
       selectedState: '',
       startDate: moment(),
-      mileage: 0
+      gallons: 0
     })
   handleSearchChange = searchValue => this.setState({ searchValue })
   handleDateChange = date => this.setState({ startDate: date })
-  handleMileageChange = e => this.setState({ mileage: e.target.value })
+  handleGallonChange = e => this.setState({ gallons: e.target.value })
   handleFormSubmit = () => {
     this.resetState()
   }
@@ -41,8 +40,8 @@ class MileageForm extends Component {
   render() {
     return (
       <Container style={{ marginTop: 20 }} textAlign="center">
-        <Header as="h1">Mileage Form</Header>
-        <div className={mileageFormContainer}>
+        <Header as="h1">Fuel Form</Header>
+        <div className={fuelFormContainer}>
           <Form
             style={{ width: 250 }}
             widths="equal"
@@ -65,11 +64,11 @@ class MileageForm extends Component {
               />
             </Form.Field>
             <Form.Input
-              label="Mileage"
+              label="Gallons"
               type="number"
-              value={this.state.mileage}
+              value={this.state.gallons}
               min={0}
-              onChange={this.handleMileageChange}
+              onChange={this.handleGallonChange}
             />
             <Button fluid>Submit</Button>
           </Form>
@@ -79,4 +78,4 @@ class MileageForm extends Component {
   }
 }
 
-export default MileageForm
+export default FuelForm

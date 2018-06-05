@@ -23,11 +23,7 @@ class MileageForm extends Component {
   }
 
   setStateSearchResult = result => this.setState({ selectedState: result })
-
-  handleDateChange = date => {
-    this.setState({ startDate: date })
-  }
-
+  handleDateChange = date => this.setState({ startDate: date })
   handleMileageChange = e => this.setState({ mileage: e.target.value })
   handleGallonChange = e => this.setState({ gallons: e.target.value })
 

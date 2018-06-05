@@ -16,6 +16,7 @@ const mileageFormContainer = css`
 
 class MileageForm extends Component {
   state = {
+    searchValue: '',
     selectedState: '',
     startDate: moment(),
     mileage: 0,
@@ -23,21 +24,39 @@ class MileageForm extends Component {
   }
 
   setStateSearchResult = result => this.setState({ selectedState: result })
+  resetState = () =>
+    this.setState({
+      searchValue: '',
+      selectedState: '',
+      startDate: moment(),
+      mileage: 0,
+      gallons: 0
+    })
+  handleSearchChange = searchValue => this.setState({ searchValue })
   handleDateChange = date => this.setState({ startDate: date })
   handleMileageChange = e => this.setState({ mileage: e.target.value })
   handleGallonChange = e => this.setState({ gallons: e.target.value })
+  handleFormSubmit = () => {
+    this.resetState()
+  }
 
   render() {
     return (
       <Container style={{ marginTop: 20 }} textAlign="center">
         <Header as="h1">Mileage Form</Header>
         <div className={mileageFormContainer}>
-          <Form style={{ width: 250 }} widths="equal">
+          <Form
+            style={{ width: 250 }}
+            widths="equal"
+            onSubmit={this.handleFormSubmit}
+          >
             <Form.Field>
               <label htmlFor="usState">Search US States</label>
               <StateSearch
                 data={usStateNames}
                 setSearchResult={this.setStateSearchResult}
+                setSearchValue={this.handleSearchChange}
+                searchValue={this.state.searchValue}
               />
             </Form.Field>
             <Form.Field>

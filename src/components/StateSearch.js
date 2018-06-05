@@ -10,28 +10,27 @@ import _debounce from 'lodash/debounce'
 class StateSearch extends Component {
   state = {
     isLoading: false,
-    results: [],
-    value: ''
+    results: []
   }
-  
+
   resetComponent = () => {
-    this.setState({ isLoading: false, results: [], value: '' }, () =>
-      this.props.setSearchResult(this.state.value)
+    this.setState({ isLoading: false, results: [] }, () =>
+      this.props.setSearchResult('')
     )
   }
 
   handleResultSelect = (e, { result }) => {
-    this.setState({ value: result.title })
+    this.props.setSearchValue(result.title)
     this.props.setSearchResult(result.title)
   }
 
   handleSearchChange = (e, { value }) => {
-    this.setState({ isLoading: true, value })
-
+    this.setState({ isLoading: true })
+    this.props.setSearchValue(value)
     setTimeout(() => {
-      if (this.state.value.length < 1) return this.resetComponent()
+      if (this.props.searchValue.length < 1) return this.resetComponent()
 
-      const re = new RegExp(_escapeRegExp(this.state.value), 'i')
+      const re = new RegExp(_escapeRegExp(this.props.searchValue), 'i')
       const isMatch = result => re.test(result.title)
       const results = flow(sortBy('title'), filter(isMatch))(this.props.data)
       this.setState({
@@ -41,8 +40,8 @@ class StateSearch extends Component {
     }, 300)
   }
   render() {
-    const { isLoading, value, results } = this.state
-
+    const { isLoading, results } = this.state
+    const { searchValue } = this.props
     return (
       <Search
         loading={isLoading}
@@ -51,7 +50,7 @@ class StateSearch extends Component {
           leading: true
         })}
         results={results}
-        value={value}
+        value={searchValue}
         placeholder="State Name"
       />
     )
@@ -60,7 +59,9 @@ class StateSearch extends Component {
 
 StateSearch.propTypes = {
   data: PropTypes.array.isRequired,
-  setSearchResult: PropTypes.func.isRequired
+  setSearchResult: PropTypes.func.isRequired,
+  setSearchValue: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired
 }
 
 export default StateSearch

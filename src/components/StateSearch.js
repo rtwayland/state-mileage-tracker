@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Search } from 'semantic-ui-react'
 import filter from 'lodash/fp/filter'
 import sortBy from 'lodash/fp/sortBy'
 import flow from 'lodash/fp/flow'
 import _escapeRegExp from 'lodash/escapeRegExp'
 import _debounce from 'lodash/debounce'
-import { usStateNames } from '../common/data'
 
 class StateSearch extends Component {
   state = {
@@ -13,14 +13,16 @@ class StateSearch extends Component {
     results: [],
     value: ''
   }
+  
   resetComponent = () => {
-    this.setState({ isLoading: false, results: [], value: '' })
-    this.props.clearStateSearch()
+    this.setState({ isLoading: false, results: [], value: '' }, () =>
+      this.props.setSearchResult(this.state.value)
+    )
   }
 
   handleResultSelect = (e, { result }) => {
     this.setState({ value: result.title })
-    this.props.setStateSearchResult(result.title)
+    this.props.setSearchResult(result.title)
   }
 
   handleSearchChange = (e, { value }) => {
@@ -31,7 +33,7 @@ class StateSearch extends Component {
 
       const re = new RegExp(_escapeRegExp(this.state.value), 'i')
       const isMatch = result => re.test(result.title)
-      const results = flow(sortBy('title'), filter(isMatch))(usStateNames)
+      const results = flow(sortBy('title'), filter(isMatch))(this.props.data)
       this.setState({
         isLoading: false,
         results
@@ -50,10 +52,15 @@ class StateSearch extends Component {
         })}
         results={results}
         value={value}
-        {...this.props}
+        placeholder="State Name"
       />
     )
   }
+}
+
+StateSearch.propTypes = {
+  data: PropTypes.array.isRequired,
+  setSearchResult: PropTypes.func.isRequired
 }
 
 export default StateSearch

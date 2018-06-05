@@ -18,7 +18,8 @@ class MileageForm extends Component {
   state = {
     selectedState: '',
     startDate: moment(),
-    mileage: 0
+    mileage: 0,
+    gallons: 0
   }
 
   setStateSearchResult = result => this.setState({ selectedState: result })
@@ -28,6 +29,7 @@ class MileageForm extends Component {
   }
 
   handleMileageChange = e => this.setState({ mileage: e.target.value })
+  handleGallonChange = e => this.setState({ gallons: e.target.value })
 
   render() {
     return (
@@ -55,6 +57,13 @@ class MileageForm extends Component {
               value={this.state.mileage}
               min={0}
               onChange={this.handleMileageChange}
+            />
+            <Form.Input
+              label="Gallons"
+              type="number"
+              value={this.state.gallons}
+              min={0}
+              onChange={this.handleGallonChange}
             />
             <Button fluid>Submit</Button>
           </Form>
